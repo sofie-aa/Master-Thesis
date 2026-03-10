@@ -3,7 +3,7 @@ import pandas as pd
 
 np.random.seed(42)
 
-n = 2000
+n = 8000
 
 # --- Helper functions ---
 def categorical(probabilities, labels):
