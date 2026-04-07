@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ECT Remission Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #e9f2ff);
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: #1f3c88;
+        }
+
+        .subtitle {
+            color: #6c757d;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+        }
+
+        .result-card {
+            background: #f8fbff;
+            border-left: 6px solid #0d6efd;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 0.75rem;
+        }
+
+        .small-note {
+            font-size: 0.92rem;
+            color: #6c757d;
+        }
+
+        .probability-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+                
+                <div class="text-center mb-4">
+                    <h1 class="page-title">ECT Remission Predictor</h1>
+                    <p class="subtitle mb-0">
+                        Enter patient characteristics to estimate the probability of remission after ECT.
+                    </p>
+                </div>
+
+                <div class="card p-4 p-md-5">
+                    <form action="/predict" method="POST">
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label for="AgeGroup" class="form-label">Age group</label>
+                                <select class="form-select" id="AgeGroup" name="AgeGroup" required>
+                                    <option value="">Select age group</option>
+                                    {% for value in options["AgeGroup"] %}
+                                        <option value="{{ value }}" {% if submitted_data.get("AgeGroup") == value %}selected{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="Sex" class="form-label">Sex</label>
+                                <select class="form-select" id="Sex" name="Sex" required>
+                                    <option value="">Select sex</option>
+                                    {% for value in options["Sex"] %}
+                                        <option value="{{ value }}" {% if submitted_data.get("Sex") == value %}selected{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="DepressionType" class="form-label">Depression type</label>
+                                <select class="form-select" id="DepressionType" name="DepressionType" required>
+                                    <option value="">Select depression type</option>
+                                    {% for value in options["DepressionType"] %}
+                                        <option value="{{ value }}" {% if submitted_data.get("DepressionType") == value %}selected{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="InitialSetting" class="form-label">Initial setting</label>
+                                <select class="form-select" id="InitialSetting" name="InitialSetting" required>
+                                    <option value="">Select initial setting</option>
+                                    {% for value in options["InitialSetting"] %}
+                                        <option value="{{ value }}" {% if submitted_data.get("InitialSetting") == value %}selected{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="Coercion" class="form-label">Coercion status</label>
+                                <select class="form-select" id="Coercion" name="Coercion" required>
+                                    <option value="">Select coercion status</option>
+                                    {% for value in options["Coercion"] %}
+                                        <option value="{{ value }}" {% if submitted_data.get("Coercion") == value %}selected{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="PsychoticFeatures" class="form-label">Psychotic features</label>
+                                <select class="form-select" id="PsychoticFeatures" name="PsychoticFeatures" required>
+                                    <option value="">Select option</option>
+                                    <option value="Yes" {% if submitted_data.get("PsychoticFeatures") == "Yes" %}selected{% endif %}>Yes</option>
+                                    <option value="No" {% if submitted_data.get("PsychoticFeatures") == "No" %}selected{% endif %}>No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="PersonalityDisorder" class="form-label">Personality disorder</label>
+                                <select class="form-select" id="PersonalityDisorder" name="PersonalityDisorder" required>
+                                    <option value="">Select option</option>
+                                    <option value="Yes" {% if submitted_data.get("PersonalityDisorder") == "Yes" %}selected{% endif %}>Yes</option>
+                                    <option value="No" {% if submitted_data.get("PersonalityDisorder") == "No" %}selected{% endif %}>No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="AnxietyDisorder" class="form-label">Anxiety disorder</label>
+                                <select class="form-select" id="AnxietyDisorder" name="AnxietyDisorder" required>
+                                    <option value="">Select option</option>
+                                    <option value="Yes" {% if submitted_data.get("AnxietyDisorder") == "Yes" %}selected{% endif %}>Yes</option>
+                                    <option value="No" {% if submitted_data.get("AnxietyDisorder") == "No" %}selected{% endif %}>No</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Predict remission
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {% if prediction %}
+                <div class="card result-card p-4 mt-4">
+                    <h3 class="mb-3">Prediction result</h3>
+                    <p class="mb-2"><strong>Model output:</strong> {{ prediction }}</p>
+
+                    {% if probability is not none %}
+                        <p class="mb-1"><strong>Estimated probability of remission</strong></p>
+                        <div class="probability-number">{{ probability }}%</div>
+
+                        <div class="progress mt-3" style="height: 22px; border-radius: 999px;">
+                            <div
+                                class="progress-bar"
+                                role="progressbar"
+                                style="width: {{ probability }}%;"
+                                aria-valuenow="{{ probability }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100">
+                                {{ probability }}%
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if error %}
+                <div class="alert alert-danger mt-4" role="alert">
+                    <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <p class="small-note mb-0">
+                        This tool is for decision support and should not be used as the sole basis for clinical decisions.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
