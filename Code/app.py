@@ -9,28 +9,27 @@ import pickle as pk
 app = fl.Flask(__name__)
 
 # Load trained model
-with open("Master-Thesis/Code/app/model.pkl", "rb") as f:
+with open("model.pkl", "rb") as f:
     model = pk.load(f)
 
 # Feature order must match training
 MODEL_FEATURES = [
-    "AgeGroup",
     "Sex",
-    "DepressionType",
-    "PsychoticFeatures",
-    "PersonalityDisorder",
     "AnxietyDisorder",
-    "InitialSetting",
-    "Coercion"
+    "PsychoticFeatures",
+    "Education",
+    "AgeGroup",
+    "SubstanceUse",
+    "MaritalStatus",
+    "DepressionType"
 ]
 
-# Dropdown options for the form
 FORM_OPTIONS = {
-    "AgeGroup": ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
-    "Sex": ["Male", "Female"],
+    "AgeGroup": ["18-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-95"],
+    "Sex": ["Female", "Male"],
     "DepressionType": ["Unipolar", "Bipolar"],
-    "InitialSetting": ["Inpatient", "Outpatient"],
-    "Coercion": ["No", "Yes"]
+    "Education": ["≤9 years", "10-12 years", ">12 years"],
+    "MaritalStatus": ["Unmarried", "Married", "Divorced", "Widowed"]
 }
 
 
@@ -48,13 +47,13 @@ def age_midpoint(age_group):
 
 
 def yes_no_to_int(value):
-    """Convert Yes/No string to 1/0."""
-    if isinstance(value, str):
-        value = value.strip().lower()
-        if value == "yes":
-            return 1
-        if value == "no":
-            return 0
+    if value is None:
+        return np.nan
+    value = str(value).strip().lower()
+    if value in {"yes", "1"}:
+        return 1
+    if value in {"no", "0"}:
+        return 0
     return np.nan
 
 
@@ -68,10 +67,10 @@ def build_feature_dataframe(form_data):
         "Sex": form_data.get("Sex"),
         "DepressionType": form_data.get("DepressionType"),
         "PsychoticFeatures": yes_no_to_int(form_data.get("PsychoticFeatures")),
-        "PersonalityDisorder": yes_no_to_int(form_data.get("PersonalityDisorder")),
         "AnxietyDisorder": yes_no_to_int(form_data.get("AnxietyDisorder")),
-        "InitialSetting": form_data.get("InitialSetting"),
-        "Coercion": form_data.get("Coercion")
+        "SubstanceUse": yes_no_to_int(form_data.get("SubstanceUse")),
+        "Education": form_data.get("Education"),
+        "MaritalStatus": form_data.get("MaritalStatus")
     }
 
     features_df = pd.DataFrame([features])
@@ -111,11 +110,15 @@ def predict():
             else "Predicted no remission"
         )
 
+        probability_rounded = round(probability, 1) if probability is not None else None
+        icon_count = int(round(probability)) if probability is not None else None
+
         return fl.render_template(
             "index.html",
             options=FORM_OPTIONS,
             prediction=prediction_text,
-            probability=round(probability, 1) if probability is not None else None,
+            probability=probability_rounded,
+            icon_count=icon_count,
             submitted_data=submitted_data
         )
 
@@ -125,6 +128,7 @@ def predict():
             options=FORM_OPTIONS,
             prediction="An error occurred while making the prediction.",
             probability=None,
+            icon_count=None,
             submitted_data=dict(fl.request.form),
             error=str(e)
         )
