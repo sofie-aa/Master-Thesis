@@ -133,30 +133,40 @@
 
 {% if prediction %}
 <div class="card result-card p-4 mt-4">
-    <h3>Prediction result</h3>
+    <h3>Possible outcome for patient</h3>
     <p><strong>{{ prediction }}</strong></p>
 
     {% if probability is not none %}
     <div class="probability-number">{{ probability }}%</div>
 
     <p class="small-note">
-        According to the model, {{ icon_count }} out of 100 similar patients may achieve remission.
+        According to the model, {{ icon_count }} out of 100 similar patients may get better after ECT treatment.
     </p>
 
-    <div class="probability-wrapper">
-        <div class="probability-bar">
-            <div class="probability-fill" style="width: {{ probability }}%;"></div>
-        </div>
-    </div>
-
     <div class="icon-array mt-4" aria-label="100-dot probability visualization">
-        {% for i in range(100) %}
-            <span class="dot {% if i < icon_count %}filled{% endif %}"></span>
-        {% endfor %}
+        {% if icon_count >= 50 %}
+            {# Show blue first when blue is majority #}
+            {% for i in range(icon_count) %}
+                <span class="dot filled"></span>
+            {% endfor %}
+    
+            {% for i in range(100 - icon_count) %}
+                <span class="dot"></span>
+            {% endfor %}
+        {% else %}
+            {# Show grey first when grey is majority #}
+            {% for i in range(100 - icon_count) %}
+                <span class="dot"></span>
+            {% endfor %}
+    
+            {% for i in range(icon_count) %}
+                <span class="dot filled"></span>
+            {% endfor %}
+        {% endif %}
     </div>
-
+    
     <p class="small-note mt-2">
-        Blue dots represent patients expected to achieve remission out of 100 similar patients.
+        Blue dots are the patients expected to get better out of 100 patients who are similar.
     </p>
     {% endif %}
 

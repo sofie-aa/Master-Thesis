@@ -105,9 +105,9 @@ def predict():
             probability = float(model.predict_proba(features_df)[0][1]) * 100
 
         prediction_text = (
-            "Predicted remission"
+            "Good chance to get better with ECT treatment"
             if int(prediction) == 1
-            else "Predicted no remission"
+            else "Lower chance to get better with ECT treatment"
         )
 
         probability_rounded = round(probability, 1) if probability is not None else None

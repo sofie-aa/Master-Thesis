@@ -211,7 +211,7 @@ data = pd.DataFrame({
 })
 
 # Save
-data.to_csv("ect_remission_synthetic.csv", index=False)
+#data.to_csv("ect_remission_synthetic.csv", index=False)
 
 print("Dataset created: ect_remission_synthetic.csv")
 print("Target remission rate:", round(target_remission_rate, 4))

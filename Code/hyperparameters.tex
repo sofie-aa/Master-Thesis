@@ -1,0 +1,22 @@
+
+\begin{longtable}{lll}
+\caption{Hyperparameters tested for each machine learning model and the best parameters found.}
+\label{tab:hyperparameters}\\
+\toprule
+\textbf{Model} & \textbf{Hyperparameters Tested} & \textbf{Best Hyperparameters} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Model} & \textbf{Hyperparameters Tested} & \textbf{Best Hyperparameters} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{Continued on next page} \\
+\midrule
+\endfoot
+\bottomrule
+\endlastfoot
+Random Forest & rf__n_estimators=[100, 200, 500], rf__max_depth=[None, 10, 20], rf__min_samples_split=[2, 5], rf__min_samples_leaf=[1, 5] & rf__max_depth=None, rf__min_samples_leaf=5, rf__min_samples_split=2, rf__n_estimators=500 \\
+Logistic Regression & lr__C=[0.01, 0.1, 1, 10], lr__penalty=['l2'] & lr__C=10, lr__penalty=l2 \\
+Gradient Boosting & gb__n_estimators=[100, 200], gb__learning_rate=[0.01, 0.1], gb__max_depth=[2, 3] & gb__learning_rate=0.1, gb__max_depth=2, gb__n_estimators=100 \\
+\end{longtable}
