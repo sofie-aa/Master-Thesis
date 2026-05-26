@@ -88,6 +88,12 @@ http://127.0.0.1:8080/
 
 The web application should now be running locally.
 
+---
+### Other information
+It should not be necessary to run the other files to be able to test out the web-application, as the model used in predicting is saved as model.pkl. *If* the web application does not work when using the steps above, you might need to run the other files in this order: 
+
+data_processing.ipnyb > then follow the steps for your computers system. 
+
 
 ## AI use declaration: 
 Generative artificial intelligence tools, specifically ChatGPT, were used as assistance during parts of the development process in this thesis. ChatGPT was primarily used to assist in generating and refining code related to the production of the synthetic dataset. 
