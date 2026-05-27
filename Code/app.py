@@ -21,7 +21,8 @@ MODEL_FEATURES = [
     "AgeGroup",
     "SubstanceUse",
     "MaritalStatus",
-    "DepressionType"
+    "DepressionType",
+    "AntidepressantBeforeECT"
 ]
 
 FORM_OPTIONS = {
@@ -29,7 +30,12 @@ FORM_OPTIONS = {
     "Sex": ["Female", "Male"],
     "DepressionType": ["Unipolar", "Bipolar"],
     "Education": ["≤9 years", "10-12 years", ">12 years"],
-    "MaritalStatus": ["Unmarried", "Married", "Divorced", "Widowed"]
+    "MaritalStatus": ["Unmarried", "Married", "Divorced", "Widowed"],
+    "AntidepressantBeforeECT": ["Never",
+        "Not 0-3 months before ECT",
+        "0-3 months, not 3-6",
+        "0-3 months and 3-6, not 6-9",
+        "0-3 months and 3-6 and 6-9"]
 }
 
 
@@ -70,7 +76,8 @@ def build_feature_dataframe(form_data):
         "AnxietyDisorder": yes_no_to_int(form_data.get("AnxietyDisorder")),
         "SubstanceUse": yes_no_to_int(form_data.get("SubstanceUse")),
         "Education": form_data.get("Education"),
-        "MaritalStatus": form_data.get("MaritalStatus")
+        "MaritalStatus": form_data.get("MaritalStatus"),
+        "AntidepressantBeforeECT": form_data.get("AntidepressantBeforeECT"),
     }
 
     features_df = pd.DataFrame([features])

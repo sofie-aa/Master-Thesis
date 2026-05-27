@@ -111,8 +111,23 @@ coercion = categorical(
     ["Voluntary", "Involuntary"]
 )
 
-# Antidepressant medication: Yes 836+619=1455
-antidepressant_med = binary(1455/1671)
+# Antidepressant before ECT:
+# Never: 28+61=89
+# Not 0-3 months before ECT: 221+163=384
+# 0-3 months, not 3-6: 149+174=323
+# 0-3 months & 3-6, not 6-9: 94+68=162
+# 0-3 months & 3-6 & 6-9: 463+250=713
+
+antidepressant_before_ect = categorical(
+    [89/1671, 384/1671, 323/1671, 162/1671, 713/1671],
+    [
+        "Never",
+        "Not 0-3 months before ECT",
+        "0-3 months, not 3-6",
+        "0-3 months and 3-6, not 6-9",
+        "0-3 months and 3-6 and 6-9"
+    ]
+)
 
 # Lithium: Yes 175+94=269
 lithium = binary(269/1671)
@@ -128,8 +143,9 @@ valproate = binary(45/1671)
 # Reference categories:
 # Female, 18-30, Married, <=9 years, Unipolar, no psychotic,
 # no substance use, no personality disorder, no anxiety,
-# Inpatient, Voluntary, No antidepressant medication, No lithium,
-# No lamotrigine, No valproate
+# Inpatient, Voluntary,
+# 0-3 months and 3-6 and 6-9 antidepressant before ECT,
+# No lithium, No lamotrigine, No valproate
 # -----------------------------
 
 eta = np.zeros(n)
@@ -170,7 +186,12 @@ eta += np.log(0.85) * (initial_setting == "Outpatient")
 eta += np.log(1.39) * (coercion == "Involuntary")
 
 # Medications
-eta += np.log(0.75) * antidepressant_med   # Yes vs No
+# Antidepressant before ECT
+# Reference: 0-3 months and 3-6 and 6-9
+eta += np.log(2.11) * (antidepressant_before_ect == "Never")
+eta += np.log(1.36) * (antidepressant_before_ect == "Not 0-3 months before ECT")
+eta += np.log(1.54) * (antidepressant_before_ect == "0-3 months, not 3-6")
+eta += np.log(1.12) * (antidepressant_before_ect == "0-3 months and 3-6, not 6-9")
 eta += np.log(0.74) * lithium              # Yes vs No
 eta += np.log(0.48) * lamotrigine          # Yes vs No
 eta += np.log(0.58) * valproate            # Yes vs No
@@ -203,7 +224,7 @@ data = pd.DataFrame({
     "AnxietyDisorder": anxiety_disorder,
     "InitialSetting": initial_setting,
     "Coercion": coercion,
-    "AntidepressantMedication": antidepressant_med,
+    "AntidepressantBeforeECT": antidepressant_before_ect,
     "Lithium": lithium,
     "Lamotrigine": lamotrigine,
     "Valproate": valproate,
@@ -211,12 +232,15 @@ data = pd.DataFrame({
 })
 
 # Save
-#data.to_csv("ect_remission_synthetic.csv", index=False)
+data.to_csv("ect_remission_synthetic.csv", index=False)
 
 print("Dataset created: ect_remission_synthetic.csv")
 print("Target remission rate:", round(target_remission_rate, 4))
 print("Observed remission rate:", round(data["Remission"].mean(), 4))
+
 print("\nColumn proportions:\n")
 print("Sex:\n", data["Sex"].value_counts(normalize=True).round(3))
-print("\nAntidepressantMedication:\n", data["AntidepressantMedication"].value_counts(normalize=True).round(3))
+print("\nAntidepressantBeforeECT:\n",
+      data["AntidepressantBeforeECT"].value_counts(normalize=True).round(3))
+
 print("\nHead:\n", data.head())
