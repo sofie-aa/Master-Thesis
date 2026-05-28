@@ -96,8 +96,12 @@
     <label class="form-label">Anxiety disorder</label>
     <select class="form-select" name="AnxietyDisorder" required>
         <option value="">Select</option>
-        <option value="1">Yes</option>
-        <option value="0">No</option>
+        <option value="1" {% if submitted_data.get("AnxietyDisorder") == "1" %}selected{% endif %}>
+            Yes
+        </option>
+        <option value="0" {% if submitted_data.get("AnxietyDisorder") == "0" %}selected{% endif %}>
+            No
+        </option>
     </select>
 </div>
 
@@ -106,8 +110,12 @@
     <label class="form-label">Psychotic features</label>
     <select class="form-select" name="PsychoticFeatures" required>
         <option value="">Select</option>
-        <option value="1">Yes</option>
-        <option value="0">No</option>
+        <option value="1" {% if submitted_data.get("PsychoticFeatures") == "1" %}selected{% endif %}>
+            Yes
+        </option>
+        <option value="0" {% if submitted_data.get("PsychoticFeatures") == "0" %}selected{% endif %}>
+            No
+        </option>
     </select>
 </div>
 
@@ -116,8 +124,12 @@
     <label class="form-label">Substance use</label>
     <select class="form-select" name="SubstanceUse" required>
         <option value="">Select</option>
-        <option value="1">Yes</option>
-        <option value="0">No</option>
+        <option value="1" {% if submitted_data.get("SubstanceUse") == "1" %}selected{% endif %}>
+            Yes
+        </option>
+        <option value="0" {% if submitted_data.get("SubstanceUse") == "0" %}selected{% endif %}>
+            No
+        </option>
     </select>
 </div>
 
@@ -126,17 +138,29 @@
     <label class="form-label">Antidepressant use before ECT</label>
     <select class="form-select" name="AntidepressantBeforeECT" required>
         <option value="">Select</option>
-        <option value="Never">Never</option>
-        <option value="Not 0-3 months before ECT">
+
+        <option value="Never"
+            {% if submitted_data.get("AntidepressantBeforeECT") == "Never" %}selected{% endif %}>
+            Never
+        </option>
+
+        <option value="Not 0-3 months before ECT"
+            {% if submitted_data.get("AntidepressantBeforeECT") == "Not 0-3 months before ECT" %}selected{% endif %}>
             No use in last 3 months
         </option>
-        <option value="0-3 months, not 3-6">
+
+        <option value="0-3 months, not 3-6"
+            {% if submitted_data.get("AntidepressantBeforeECT") == "0-3 months, not 3-6" %}selected{% endif %}>
             0-3 months only
         </option>
-        <option value="0-3 months and 3-6, not 6-9">
+
+        <option value="0-3 months and 3-6, not 6-9"
+            {% if submitted_data.get("AntidepressantBeforeECT") == "0-3 months and 3-6, not 6-9" %}selected{% endif %}>
             0-6 months (not 6-9)
         </option>
-        <option value="0-3 months and 3-6 and 6-9">
+
+        <option value="0-3 months and 3-6 and 6-9"
+            {% if submitted_data.get("AntidepressantBeforeECT") == "0-3 months and 3-6 and 6-9" %}selected{% endif %}>
             0-9 months continuous
         </option>
     </select>
@@ -147,6 +171,16 @@
         Predict remission
     </button>
 </div>
+
+<div class="col-12 mt-2">
+    <a href="/" class="btn btn-reset w-100">
+        Reset form
+    </a>
+</div>
+
+<p class="small-note mt-3">
+    This is not a clinical device. This estimate is based on the entered patient characteristics and should support, not replace, clinical judgment by a clinician.
+</p>
 
 </div>
 </form>
@@ -159,7 +193,7 @@
 {% if prediction %}
 <div class="spotlight-overlay">
     <div class="card result-card spotlight-card p-4">
-        <a href="/" class="spotlight-close" aria-label="Close result">×</a>
+        <button type="button" class="spotlight-close" onclick="closeSpotlight()" aria-label="Close result">×</button>
         <h3>Possible outcome for patient</h3>
         <p><strong>{{ prediction }}</strong></p>
 
@@ -167,7 +201,7 @@
         <div class="probability-number">{{ probability }}%</div>
 
         <p class="small-note">
-            According to the model, {{ icon_count }} out of 100 similar patients may get better after ECT treatment.
+            According to our AI model, {{ icon_count }} out of 100 similar patients may get better after ECT.
         </p>
 
         <div class="icon-array mt-4" aria-label="100-dot probability visualization">
@@ -194,11 +228,17 @@
         {% endif %}
 
         <p class="small-note mt-3">
-            This estimate is based on the entered patient characteristics and should support, not replace, clinical judgment by a professional clinician.
+            This is not a clinical device. This estimate is based on the entered patient characteristics and should support, not replace, clinical judgment by a clinician.
         </p>
     </div>
 </div>
 {% endif %}
+
+<script>
+    function closeSpotlight() {
+        document.querySelector(".spotlight-overlay").style.display = "none";
+    }
+    </script>
 
 </body>
 </html>
