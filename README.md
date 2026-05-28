@@ -22,6 +22,14 @@ Using conda:
 conda install flask waitress numpy pandas scikit-learn matplotlib
 ```
 
+It is optional, but recommended to create an environment to run the application. To do so: 
+
+```bash
+conda create -n ECTapp python=3.12
+conda activate ECTapp
+```
+Then, download the required packages using pip or conda install by running the lines above. 
+
 ---
 
 ## For Windows
