@@ -10,8 +10,16 @@ Make sure Python is installed on your computer.
 
 You may also need to install the required Python libraries. Open a terminal (MacOS) or Command Prompt/PowerShell (Windows) and run:
 
+Using pip:
+
 ```bash
-pip install flask waitress numpy pandas scikit-learn
+pip install flask waitress numpy pandas scikit-learn matplotlib
+```
+
+Using conda:
+
+```bash
+conda install flask waitress numpy pandas scikit-learn matplotlib
 ```
 
 ---
