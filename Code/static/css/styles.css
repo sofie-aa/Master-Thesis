@@ -17,12 +17,81 @@ body {
 .card {
     border: none;
     border-radius: 1rem;
-    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+}
+
+.spotlight-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-top: 7rem;
+
+    background: rgba(31, 60, 136, 0.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .result-card {
-    background: #f1f7ff;
-    border-left: 6px solid #0d6efd;
+    position: relative;
+
+    width: min(700px, 90vw);
+
+    background: rgba(255, 255, 255, 0.944);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 2rem;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.25),
+        0 10px 30px rgba(13,110,253,0.15);
+
+    text-align: center;
+}
+
+.result-card:hover {
+    transform: translateY(-3px);
+}
+
+.spotlight-close {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+
+    color: #7a8794;
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+.spotlight-close:hover {
+    background: rgba(0,0,0,0.06);
+    color: #1f3c88;
+}
+
+.probability-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0d6efd;
+    margin: 1rem 0;
 }
 
 .form-label {
@@ -40,33 +109,7 @@ body {
     color: #6c757d;
 }
 
-.probability-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #0d6efd;
-}
-
-/* === Probability bar === */
-.probability-wrapper {
-    margin-top: 1rem;
-}
-
-.probability-bar {
-    width: 100%;
-    height: 18px;
-    background: #e9ecef;
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.probability-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #6ea8fe, #0d6efd);
-    border-radius: 999px;
-    transition: width 0.4s ease;
-}
-
-/* === 100-dot visualization === */
+/*100-dot visualization */
 .icon-array {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -86,3 +129,4 @@ body {
 .dot.filled {
     background: #03befd;
 }
+

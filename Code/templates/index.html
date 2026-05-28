@@ -152,53 +152,53 @@
 </form>
 </div>
 
+</div>
+</div>
+</div>
+
 {% if prediction %}
-<div class="card result-card p-4 mt-4">
-    <h3>Possible outcome for patient</h3>
-    <p><strong>{{ prediction }}</strong></p>
+<div class="spotlight-overlay">
+    <div class="card result-card spotlight-card p-4">
+        <a href="/" class="spotlight-close" aria-label="Close result">×</a>
+        <h3>Possible outcome for patient</h3>
+        <p><strong>{{ prediction }}</strong></p>
 
-    {% if probability is not none %}
-    <div class="probability-number">{{ probability }}%</div>
+        {% if probability is not none %}
+        <div class="probability-number">{{ probability }}%</div>
 
-    <p class="small-note">
-        According to the model, {{ icon_count }} out of 100 similar patients may get better after ECT treatment.
-    </p>
+        <p class="small-note">
+            According to the model, {{ icon_count }} out of 100 similar patients may get better after ECT treatment.
+        </p>
 
-    <div class="icon-array mt-4" aria-label="100-dot probability visualization">
-        {% if icon_count >= 50 %}
-            {# Show blue first when blue is majority #}
-            {% for i in range(icon_count) %}
-                <span class="dot filled"></span>
-            {% endfor %}
-    
-            {% for i in range(100 - icon_count) %}
-                <span class="dot"></span>
-            {% endfor %}
-        {% else %}
-            {# Show grey first when grey is majority #}
-            {% for i in range(100 - icon_count) %}
-                <span class="dot"></span>
-            {% endfor %}
-    
-            {% for i in range(icon_count) %}
-                <span class="dot filled"></span>
-            {% endfor %}
+        <div class="icon-array mt-4" aria-label="100-dot probability visualization">
+            {% if icon_count >= 50 %}
+                {% for i in range(icon_count) %}
+                    <span class="dot filled"></span>
+                {% endfor %}
+                {% for i in range(100 - icon_count) %}
+                    <span class="dot"></span>
+                {% endfor %}
+            {% else %}
+                {% for i in range(100 - icon_count) %}
+                    <span class="dot"></span>
+                {% endfor %}
+                {% for i in range(icon_count) %}
+                    <span class="dot filled"></span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <p class="small-note mt-2">
+            Blue dots are the patients expected to get better out of 100 patients who are similar.
+        </p>
         {% endif %}
-    </div>
-    
-    <p class="small-note mt-2">
-        Blue dots are the patients expected to get better out of 100 patients who are similar.
-    </p>
-    {% endif %}
 
-    <p class="small-note mt-3">
-        This estimate is based on the entered patient characteristics and should support, not replace, clinical judgment by a professional clinician.
-    </p>
+        <p class="small-note mt-3">
+            This estimate is based on the entered patient characteristics and should support, not replace, clinical judgment by a professional clinician.
+        </p>
+    </div>
 </div>
 {% endif %}
 
-</div>
-</div>
-</div>
 </body>
 </html>
